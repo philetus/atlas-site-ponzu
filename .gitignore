@@ -1,3 +1,6 @@
+cmd/ponzu/vendor
+
+# only commit data ontology, not config & data
 search
 uploads
 analytics.db
