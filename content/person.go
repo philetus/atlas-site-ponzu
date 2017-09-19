@@ -7,13 +7,15 @@ import (
 	"github.com/ponzu-cms/ponzu/system/item"
 )
 
-// Person -> stores info about a person at atlas!
 type Person struct {
 	item.Item
 
-	Name  string `json:"name"`
-	Photo string `json:"photo"`
-	Bio   string `json:"bio"`
+	Name              string   `json:"name"`
+	Role              string   `json:"role"`
+	ResearchInterests []string `json:"research-interests"`
+	Portrait          string   `json:"portrait"`
+	Quip              string   `json:"quip"`
+	Bio               string   `json:"bio"`
 }
 
 // MarshalEditor writes a buffer of html to edit a Person within the CMS
@@ -31,9 +33,29 @@ func (p *Person) MarshalEditor() ([]byte, error) {
 			}),
 		},
 		editor.Field{
-			View: editor.File("Photo", p, map[string]string{
-				"label":       "Photo",
-				"placeholder": "Upload the Photo here",
+			View: editor.Select("Role", p, map[string]string{
+				"label": "Role",
+			}, map[string]string{
+			// "value": "Display Name",
+			}),
+		},
+		editor.Field{
+			View: editor.Tags("ResearchInterests", p, map[string]string{
+				"label":       "ResearchInterests",
+				"placeholder": "+ResearchInterests",
+			}),
+		},
+		editor.Field{
+			View: editor.File("Portrait", p, map[string]string{
+				"label":       "Portrait",
+				"placeholder": "Upload the Portrait here",
+			}),
+		},
+		editor.Field{
+			View: editor.Input("Quip", p, map[string]string{
+				"label":       "Quip",
+				"type":        "text",
+				"placeholder": "Enter the Quip here",
 			}),
 		},
 		editor.Field{
@@ -53,8 +75,4 @@ func (p *Person) MarshalEditor() ([]byte, error) {
 
 func init() {
 	item.Types["Person"] = func() interface{} { return new(Person) }
-}
-
-func (p *Person) String() string {
-	return p.Name
 }
