@@ -14,7 +14,7 @@ type Publication struct {
 	item.Item
 
 	Title          string   `json:"title"`
-	Format         []string `json:"format"`
+	Format         string   `json:"format"`
 	ResearchTopics []string `json:"research-topics"`
 	Authors        []string `json:"authors"`
 	Labs           []string `json:"labs"`
@@ -40,7 +40,7 @@ func (p *Publication) MarshalEditor() ([]byte, error) {
 			}),
 		},
 		editor.Field{
-			View: editor.SelectRepeater("Format", p, map[string]string{
+			View: editor.Select("Format", p, map[string]string{
 				"label": "Format",
 			}, map[string]string{
 				// "value": "Display Name",
