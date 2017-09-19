@@ -9,16 +9,17 @@ import (
 	"github.com/ponzu-cms/ponzu/system/item"
 )
 
-// Project -> a research project at atlas
+// Project ->
 type Project struct {
 	item.Item
 
-	Name        string   `json:"name"`
-	Topics      []string `json:"topics"`
-	Researchers []string `json:"researchers"`
-	Splashimage string   `json:"splashimage"`
-	Summary     string   `json:"summary"`
-	Description string   `json:"description"`
+	Name           string   `json:"name"`
+	ResearchTopics []string `json:"research-topics"`
+	Researchers    []string `json:"researchers"`
+	Labs           []string `json:"labs"`
+	SplashImage    string   `json:"splash-image"`
+	Summary        string   `json:"summary"`
+	Description    string   `json:"description"`
 }
 
 // MarshalEditor writes a buffer of html to edit a Project within the CMS
@@ -36,9 +37,9 @@ func (p *Project) MarshalEditor() ([]byte, error) {
 			}),
 		},
 		editor.Field{
-			View: editor.Tags("Topics", p, map[string]string{
-				"label":       "Topics",
-				"placeholder": "+Topics",
+			View: editor.Tags("ResearchTopics", p, map[string]string{
+				"label":       "ResearchTopics",
+				"placeholder": "+ResearchTopics",
 			}),
 		},
 		editor.Field{
@@ -50,9 +51,17 @@ func (p *Project) MarshalEditor() ([]byte, error) {
 			),
 		},
 		editor.Field{
-			View: editor.File("Splashimage", p, map[string]string{
-				"label":       "Splashimage",
-				"placeholder": "Upload the Splashimage here",
+			View: reference.SelectRepeater("Labs", p, map[string]string{
+				"label": "Labs",
+			},
+				"Lab",
+				`{{ .name }} `,
+			),
+		},
+		editor.Field{
+			View: editor.File("SplashImage", p, map[string]string{
+				"label":       "SplashImage",
+				"placeholder": "Upload the SplashImage here",
 			}),
 		},
 		editor.Field{
@@ -86,9 +95,9 @@ func (p *Project) String() string {
 }
 
 // Push -> tells cms to preemptively push referenced records
-func (p *Project) Push() []string {
-	return []string{ // takes a list of json selectors from project struct
-		"researchers",
-		"splashimage",
-	}
-}
+// func (p *Project) Push() []string {
+// 	return []string{ // takes a list of json selectors from project struct
+// 		"researchers",
+// 		"splashimage",
+// 	}
+// }
